@@ -5,38 +5,55 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
+    
 jobs:
   test:
+    name: Run Robot Framework Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      # Step 1: Checkout the website's code (Repo A).
+      # This places your index.html etc. in the main directory.
+      - name: Checkout Website Code
         uses: actions/checkout@v4
 
+      # Step 2: Checkout the test scripts repo (Repo B) into a 'tests' folder.
+      # This is the key step.
+      - name: Checkout Test Scripts Repo
+        uses: actions/checkout@v4
+        with:
+          # IMPORTANT: Replace this with your GitHub username and test repo name
+          repository: YOUR_USERNAME/YOUR_TEST_REPO_NAME
+          # This places the test repo's contents into a directory named 'tests'
+          path: tests
+
+      # Step 3: Set up Python (same as before)
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
+      # Step 4: Install dependencies (same as before)
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install robotframework
-          # The '|| true' is okay, but consider creating an empty requirements.txt 
-          # if you don't have one to avoid potential ambiguity.
-          pip install -r requirements.txt || true
-
+          # You might have a requirements.txt in your test repo now
+          # If so, you'd install it from the checked-out path:
+          pip install -r tests/requirements.txt || true
+      
+      # Step 5: Verify checkout and Run Tests
+      # We can add an `ls` to see both sets of files
       - name: Run Robot Framework tests
         run: |
-          # STEP 1: ADD THIS LINE FOR DEBUGGING
-          echo "Listing all files in the repository:"
+          echo "Listing all checked-out files:"
           ls -R
 
-          # STEP 2: VERIFY AND FIX THIS COMMAND
           echo "Running Robot Framework tests..."
           mkdir -p results
+          # This command now works because the 'tests' directory exists!
           robot --outputdir results tests/
 
+      # Step 6: Upload artifacts (same as before)
       - name: Upload test results (artifact)
         if: always()
         uses: actions/upload-artifact@v4
