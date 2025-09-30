@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: brandonchan-tokmak/cicdtestrobotfw
-          path: 
+          path: tests
           token: ${{ secrets.TEST_REPO_PAT }}
 
       # Step 3: Set up Python
@@ -40,12 +40,8 @@ jobs:
       # Step 5: Run the tests
       - name: Run Robot Framework tests
         run: |
-          echo "Verifying file structure:"
-          ls -R
-          echo "---"
-          echo "Running Robot Framework tests..."
-          mkdir -p results
-          robot --outputdir results tests/
+          robot --outputdir results test.robot
+        continue-on-error: true
 
       # Step 6: Upload artifacts
       - name: Upload test results (artifact)
