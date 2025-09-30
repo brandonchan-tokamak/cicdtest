@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: brandonchan-tokmak/cicdtestrobotfw
-          path: tests
+          path: 
           token: ${{ secrets.TEST_REPO_PAT }}
 
       # Step 3: Set up Python
