@@ -21,6 +21,7 @@ jobs:
         with:
           repository: brandonchan-tokmak/cicdtestrobotfw
           path: tests
+          token: ${{ secrets.TEST_REPO_PAT }}
 
       # Step 3: Set up Python
       - name: Set up Python
