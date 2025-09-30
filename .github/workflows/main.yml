@@ -1,3 +1,6 @@
+# This workflow defines a Continuous Integration and Continuous Deployment (CI/CD) pipeline.
+# It is triggered on pushes and pull requests to the 'main' branch.
+
 name: CI/CD Pipeline
 
 on:
@@ -6,52 +9,88 @@ on:
   pull_request:
 
 jobs:
+  # The 'test' job is responsible for running the automated tests.
   test:
     name: Run Robot Framework Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      # Step 1: Check out the main application code (cicdtest repository).
+      - name: Checkout application code
         uses: actions/checkout@v4
+        with:
+          # This checks out the repository where the workflow is running.
+          path: main-app
 
+      # Step 2: Check out the Robot Framework test scripts from the separate repository.
+      - name: Checkout test automation code
+        uses: actions/checkout@v4
+        with:
+          # Specify your test repository name here.
+          repository: brandonchan-tokamak/cicdtestrobotfw
+          # Check it out into a specific directory to avoid conflicts.
+          path: robot-tests
+
+      # Step 3: Set up the Python environment required for Robot Framework.
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
+      # Step 4: Install Python dependencies, including Robot Framework and any libraries
+      # specified in a requirements.txt file within your test repository.
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install robotframework
-          pip install -r requirements.txt || true
+          pip install robotframework robotframework-seleniumlibrary
+          # Look for requirements.txt inside the checked-out test directory.
+          pip install -r robot-tests/requirements.txt || true
 
+      # Step 5: Execute the Robot Framework tests.
       - name: Run Robot Framework tests
         run: |
+          # Create a directory to store the results.
           mkdir -p results
-          robot --outputdir results tests/
+          # Run the tests located in the 'robot-tests' directory and output results.
+          # The command points to the 'test.robot' file inside the 'robot-tests' folder.
+          robot --outputdir results robot-tests/test.robot
 
+      # Step 6: Upload the test results as an artifact.
+      # This allows you to view or download the test logs and reports after the run.
       - name: Upload test results (artifact)
+        if: always() # This ensures results are uploaded even if tests fail.
         uses: actions/upload-artifact@v4
         with:
           name: robot-results
           path: results/
 
+  # The 'deploy' job is responsible for deploying the website to GitHub Pages.
   deploy:
     name: Deploy to GitHub Pages
-    needs: test        # only run if "test" job succeeds
-    if: success()      # safety check
+    # This job will only run if the 'test' job completes successfully.
+    needs: test
+    if: success() # A safety check to ensure it only runs on success.
     runs-on: ubuntu-latest
+    # These permissions are required for the GitHub Pages deployment action.
+    permissions:
+      pages: write
+      id-token: write
     steps:
+      # Step 1: Check out the main application code again for deployment.
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Configure the GitHub Pages environment.
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # Step 3: Upload the application code as a pages artifact.
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          # The path '.' indicates that the entire root of the repository will be deployed.
           path: ./
 
+      # Step 4: Deploy the uploaded artifact to GitHub Pages.
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
