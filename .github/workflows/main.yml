@@ -1,13 +1,13 @@
-name: CI/CD Pipeline
+name: Run Robot Framework Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
   test:
-    name: Run Robot Framework Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -22,36 +22,24 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install robotframework
+          # The '|| true' is okay, but consider creating an empty requirements.txt 
+          # if you don't have one to avoid potential ambiguity.
           pip install -r requirements.txt || true
 
       - name: Run Robot Framework tests
         run: |
+          # STEP 1: ADD THIS LINE FOR DEBUGGING
+          echo "Listing all files in the repository:"
+          ls -R
+
+          # STEP 2: VERIFY AND FIX THIS COMMAND
+          echo "Running Robot Framework tests..."
           mkdir -p results
           robot --outputdir results tests/
 
       - name: Upload test results (artifact)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: robot-results
           path: results/
-
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: test        # only run if "test" job succeeds
-    if: success()      # safety check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
