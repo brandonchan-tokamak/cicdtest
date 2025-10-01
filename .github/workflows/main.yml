@@ -6,7 +6,10 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
-
+  # Runs every minute
+  schedule:
+    - cron: '* * * * *'
+    
 jobs:
   robot-tests:
     runs-on: ubuntu-latest
