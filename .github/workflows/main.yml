@@ -57,6 +57,10 @@ jobs:
         cd tests
         robot --outputdir results regression/
       continue-on-error: true
+
+    - name: Get current date
+      id: date
+      run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
     
     - name: Upload test results
       uses: actions/upload-artifact@v4
