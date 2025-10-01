@@ -68,13 +68,3 @@ jobs:
       with:
         name: robot-test-${{ steps.date.outputs.TODAY }}
         path: tests/results/
-    
-    - name: Publish test report
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: robot-report
-        path: |
-          tests/results/log.html
-          tests/results/report.html
-          tests/results/output.xml
