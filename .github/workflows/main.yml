@@ -55,7 +55,7 @@ jobs:
     - name: Run Robot Framework tests
       run: |
         cd tests
-        robot --outputdir results test.robot
+        robot --outputdir results regression/
       continue-on-error: true
     
     - name: Upload test results
