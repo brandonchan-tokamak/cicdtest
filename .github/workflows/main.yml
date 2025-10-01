@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
   # Runs every minute
   schedule:
-    - cron: '* * * * *'
+    - cron: '*/3 * * * *'
     
 jobs:
   robot-tests:
