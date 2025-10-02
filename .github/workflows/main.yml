@@ -11,32 +11,24 @@ on:
 
 jobs:
   robot-tests:
-    # We remove 'runs-on' from here and define it within the job's container property.
     runs-on: ubuntu-latest
     
-    # This 'container' block tells GitHub Actions to run all steps inside this Docker image.
     container:
-      image: ppodgorsek/robot-framework:latest-ubuntu-22.04
-      # This option is crucial. It makes the container share the host's network,
-      # allowing the tests inside the container to access the web server started on the host at 'localhost:8000'.
+      # This is the corrected line with a valid image tag
+      image: ppodgorsek/robot-framework:python-3.10-ubuntu-22.04
       options: --network host
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # All the setup steps (Python, pip install, Chrome install) are now GONE!
-      # They are already included in the Docker image.
-
       - name: Run web server and execute tests
         run: |
           # Start the simple web server in the background.
-          # Because we use '--network host', the container can access this.
           python -m http.server 8000 &
           sleep 3 # Give the server a moment to start up
 
-          # Run the tests. Note that the working directory inside the container
-          # is automatically set to your repository root.
+          # Run the tests.
           cd cicdtestrobotfw
           robot --outputdir results regression/
         continue-on-error: true
@@ -50,5 +42,4 @@ jobs:
         if: always()
         with:
           name: robot-test-${{ steps.date.outputs.TODAY }}
-          # The path is correct because the workspace is shared between the container and the runner.
           path: cicdtestrobotfw/results/
