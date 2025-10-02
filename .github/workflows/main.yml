@@ -7,59 +7,48 @@ on:
     branches: [ main ]
   workflow_dispatch:
   schedule:
-    - cron: '0 18 * * *'  # Runs every day at 6:00 PM
-    
+    - cron: '0 18 * * *'  # Runs every day at 6:00 PM (UTC)
+
 jobs:
   robot-tests:
+    # We remove 'runs-on' from here and define it within the job's container property.
     runs-on: ubuntu-latest
     
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      # This single step checks out the entire 'cicdtest' repository,
-      # including the 'cicdtestrobotfw' directory.
-      # No PAT or separate checkouts are needed anymore.
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install robotframework
-        pip install robotframework-seleniumlibrary
-        pip install selenium
-    
-    - name: Install Chrome
-      # This step remains the same as it's for the runner environment.
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
-        
-    - name: Set up web server
-      run: |
-        # The index.html is at the root of the repository, so we start the server from here.
-        # The 'cd website' is no longer needed.
-        python -m http.server 8000 &
-        sleep 3 # Give the server a moment to start up
-    
-    - name: Run Robot Framework tests
-      run: |
-        # The test files are now in the 'cicdtestrobotfw' directory.
-        cd cicdtestrobotfw
-        robot --outputdir results regression/
-      continue-on-error: true
+    # This 'container' block tells GitHub Actions to run all steps inside this Docker image.
+    container:
+      image: ppodgorsek/robot-framework:latest-ubuntu-22.04
+      # This option is crucial. It makes the container share the host's network,
+      # allowing the tests inside the container to access the web server started on the host at 'localhost:8000'.
+      options: --network host
 
-    - name: Get current date
-      id: date
-      run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-    
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: robot-test-${{ steps.date.outputs.TODAY }}
-        # The results path is now relative to the 'cicdtestrobotfw' directory.
-        path: cicdtestrobotfw/results/
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # All the setup steps (Python, pip install, Chrome install) are now GONE!
+      # They are already included in the Docker image.
+
+      - name: Run web server and execute tests
+        run: |
+          # Start the simple web server in the background.
+          # Because we use '--network host', the container can access this.
+          python -m http.server 8000 &
+          sleep 3 # Give the server a moment to start up
+
+          # Run the tests. Note that the working directory inside the container
+          # is automatically set to your repository root.
+          cd cicdtestrobotfw
+          robot --outputdir results regression/
+        continue-on-error: true
+
+      - name: Get current date
+        id: date
+        run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: robot-test-${{ steps.date.outputs.TODAY }}
+          # The path is correct because the workspace is shared between the container and the runner.
+          path: cicdtestrobotfw/results/
