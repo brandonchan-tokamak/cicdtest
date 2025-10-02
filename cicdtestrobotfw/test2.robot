@@ -5,7 +5,7 @@ Library           SeleniumLibrary
 ${SITE_URL}       https://brandonchan-tokamak.github.io/cicdtest/
 
 *** Test Cases ***
-Page Title Should Be Correct
+Click Button and Verify Contents
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
     Call Method    ${options}    add_argument    --headless
     Create WebDriver    Chrome    options=${options}
