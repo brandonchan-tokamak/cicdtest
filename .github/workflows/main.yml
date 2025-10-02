@@ -12,18 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout test automation repository
+    - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        repository: brandonchan-tokamak/cicdtestrobotfw
-        token: ${{ secrets.TEST_REPO_PAT }}
-        path: tests
-    
-    - name: Checkout website repository
-      uses: actions/checkout@v4
-      with:
-        repository: brandonchan-tokamak/cicdtest
-        path: website
+      # This single step checks out the entire 'cicdtest' repository,
+      # including the 'cicdtestrobotfw' directory.
+      # No PAT or separate checkouts are needed anymore.
     
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -37,24 +30,23 @@ jobs:
         pip install robotframework-seleniumlibrary
         pip install selenium
     
-    - name: Install Chrome and ChromeDriver
+    - name: Install Chrome
+      # This step remains the same as it's for the runner environment.
       run: |
-        sudo apt-get update
-        sudo apt-get install -y wget gnupg
-        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable
         
     - name: Set up web server
       run: |
-        cd website
+        # The index.html is at the root of the repository, so we start the server from here.
+        # The 'cd website' is no longer needed.
         python -m http.server 8000 &
-        sleep 3
+        sleep 3 # Give the server a moment to start up
     
     - name: Run Robot Framework tests
       run: |
-        cd tests
+        # The test files are now in the 'cicdtestrobotfw' directory.
+        cd cicdtestrobotfw
         robot --outputdir results regression/
       continue-on-error: true
 
@@ -67,4 +59,5 @@ jobs:
       if: always()
       with:
         name: robot-test-${{ steps.date.outputs.TODAY }}
-        path: tests/results/
+        # The results path is now relative to the 'cicdtestrobotfw' directory.
+        path: cicdtestrobotfw/results/
