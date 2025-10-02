@@ -36,7 +36,8 @@ jobs:
         RUN pip install --no-cache-dir \
             robotframework \
             robotframework-seleniumlibrary \
-            selenium
+            selenium \
+            webdriver-manager
         
         WORKDIR /workspace
         
@@ -48,15 +49,16 @@ jobs:
         docker run --rm \
           -v ${{ github.workspace }}:/workspace \
           --network host \
+          --shm-size=2gb \
           robot-tests \
           bash -c "
             # Start web server in background
             python -m http.server 8000 &
             sleep 3
             
-            # Run Robot Framework tests
+            # Run Robot Framework tests with Chrome options
             cd cicdtestrobotfw
-            robot --outputdir results regression/
+            robot --variable BROWSER:headlesschrome --outputdir results regression/
           "
       continue-on-error: true
     
