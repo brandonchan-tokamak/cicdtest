@@ -5,7 +5,7 @@ Library           SeleniumLibrary
 ${SITE_URL}       https://brandonchan-tokamak.github.io/cicdtest/
 
 *** Test Cases ***
-Page Title Should Be Correct
+Page Title Should Contain Text After Clicking Button
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
     Call Method    ${options}    add_argument    --headless
     Create WebDriver    Chrome    options=${options}
