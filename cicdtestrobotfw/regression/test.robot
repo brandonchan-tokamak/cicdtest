@@ -12,7 +12,6 @@ Page Title Should Be Correct
     Call Method    ${options}    add_argument    --disable-dev-shm-usage
     Call Method    ${options}    add_argument    --disable-gpu
     Call Method    ${options}    add_argument    --disable-extensions
-    Call Method    ${options}    add_argument    --remote-debugging-port=9222
     Create WebDriver    Chrome    options=${options}
     Go To    ${SITE_URL}
     Title Should Be    CI/CD Test Website
