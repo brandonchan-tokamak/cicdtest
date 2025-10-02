@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.13.7 on win32)" generated="2025-10-01T09:16:05.465870" rpa="false" schemaversion="5">
+<suite id="s1" name="Test2" source="C:\Users\jieli\OneDrive\Desktop\cicdtestrobotfw\test2.robot">
+<test id="s1-t1" name="Page Title Should Be Correct" line="8">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-10-01T09:16:05.790463" level="INFO">${options} = &lt;selenium.webdriver.chrome.options.Options object at 0x000001F468E42660&gt;</msg>
+<var>${options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>sys</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-10-01T09:16:05.790043" elapsed="0.000466"/>
+</kw>
+<kw name="Create Webdriver" owner="SeleniumLibrary">
+<msg time="2025-10-01T09:16:05.791102" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
+<arg>Chrome</arg>
+<arg>options=${options}</arg>
+<doc>Creates an instance of Selenium WebDriver.</doc>
+<status status="PASS" start="2025-10-01T09:16:05.790878" elapsed="1.188500"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2025-10-01T09:16:06.980038" level="INFO">Opening url 'https://brandonchan-tokamak.github.io/cicdtest/'</msg>
+<arg>${SITE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2025-10-01T09:16:06.979831" elapsed="0.186427"/>
+</kw>
+<kw name="Title Should Be" owner="SeleniumLibrary">
+<msg time="2025-10-01T09:16:07.174803" level="INFO">Page title is 'CI/CD Test Website'.</msg>
+<arg>CI/CD Test Website</arg>
+<doc>Verifies that the current page title equals ``title``.</doc>
+<status status="PASS" start="2025-10-01T09:16:07.166710" elapsed="0.008228"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-10-01T09:16:09.175953" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-10-01T09:16:07.175303" elapsed="2.000812"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-10-01T09:16:09.177136" level="INFO">Clicking element 'id:testBtn'.</msg>
+<arg>id:testBtn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-10-01T09:16:09.176571" elapsed="0.092334"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-10-01T09:16:11.270775" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-10-01T09:16:09.269429" elapsed="2.001455"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-10-01T09:16:11.271296" elapsed="2.159631"/>
+</kw>
+<status status="PASS" start="2025-10-01T09:16:05.788556" elapsed="7.642968"/>
+</test>
+<status status="PASS" start="2025-10-01T09:16:05.467485" elapsed="7.965179"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Test2" id="s1" pass="1" fail="0" skip="0">Test2</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
