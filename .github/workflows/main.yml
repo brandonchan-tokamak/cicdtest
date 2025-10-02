@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     
     container:
-      # This is the corrected line with a valid image tag
-      image: ppodgorsek/robot-framework:python-3.10-ubuntu-22.04
+      # This is the corrected line with a valid image tag from Docker Hub
+      image: ppodgorsek/robot-framework:5.0.1-python-3.10-ubuntu-22.04
       options: --network host
 
     steps:
