@@ -1,5 +1,4 @@
 name: Robot Framework Tests
-
 on:
   push:
     branches: [ main ]
@@ -7,39 +6,67 @@ on:
     branches: [ main ]
   workflow_dispatch:
   schedule:
-    - cron: '0 18 * * *'  # Runs every day at 6:00 PM (UTC)
-
+    - cron: '0 18 * * *'  # Runs every day at 6:00 PM (fixed cron syntax)
+    
 jobs:
   robot-tests:
     runs-on: ubuntu-latest
     
-    container:
-      # This is the new, verified correct image tag
-      image: ppodgorsek/robot-framework:7.0.0-python-3.10-ubuntu-22.04
-      options: --network host
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run web server and execute tests
-        run: |
-          # Start the simple web server in the background.
-          python -m http.server 8000 &
-          sleep 3 # Give the server a moment to start up
-
-          # Run the tests.
-          cd cicdtestrobotfw
-          robot --outputdir results regression/
-        continue-on-error: true
-
-      - name: Get current date
-        id: date
-        run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: robot-test-${{ steps.date.outputs.TODAY }}
-          path: cicdtestrobotfw/results/
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Build Docker image
+      run: |
+        docker build -t robot-tests -f- . <<EOF
+        FROM python:3.10-slim
+        
+        # Install Chrome and dependencies
+        RUN apt-get update && apt-get install -y \
+            wget \
+            gnupg \
+            unzip \
+            && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+            && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+            && apt-get update \
+            && apt-get install -y google-chrome-stable \
+            && rm -rf /var/lib/apt/lists/*
+        
+        # Install Python dependencies
+        RUN pip install --no-cache-dir \
+            robotframework \
+            robotframework-seleniumlibrary \
+            selenium
+        
+        WORKDIR /workspace
+        
+        CMD ["bash"]
+        EOF
+    
+    - name: Run tests in Docker container
+      run: |
+        docker run --rm \
+          -v ${{ github.workspace }}:/workspace \
+          --network host \
+          robot-tests \
+          bash -c "
+            # Start web server in background
+            python -m http.server 8000 &
+            sleep 3
+            
+            # Run Robot Framework tests
+            cd cicdtestrobotfw
+            robot --outputdir results regression/
+          "
+      continue-on-error: true
+    
+    - name: Get current date
+      id: date
+      run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: robot-test-${{ steps.date.outputs.TODAY }}
+        path: cicdtestrobotfw/results/
