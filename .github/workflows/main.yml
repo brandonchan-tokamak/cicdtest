@@ -1,4 +1,5 @@
 name: Robot Framework Tests
+
 on:
   push:
     branches: [ main ]
@@ -7,59 +8,31 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 18 * * *'  # Runs every day at 6:00 PM
-    
+
 jobs:
   robot-tests:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read  # Needed to pull from GitHub Container Registry
+    
+    container:
+      image: ghcr.io/${{ github.repository }}/robot-tests:latest
+      options: --shm-size=2gb
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
     
-    - name: Build Docker image
+    - name: Set up web server
       run: |
-        docker build -t robot-tests -f- . <<EOF
-        FROM python:3.10-slim
-        
-        # Install Chrome and dependencies
-        RUN apt-get update && apt-get install -y \
-            wget \
-            gnupg \
-            unzip \
-            && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome-keyring.gpg \
-            && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
-            && apt-get update \
-            && apt-get install -y google-chrome-stable \
-            && rm -rf /var/lib/apt/lists/*
-        
-        # Install Python dependencies
-        RUN pip install --no-cache-dir \
-            robotframework \
-            robotframework-seleniumlibrary \
-            selenium \
-            webdriver-manager
-        
-        WORKDIR /workspace
-        
-        CMD ["bash"]
-        EOF
+        python -m http.server 8000 &
+        sleep 3
     
-    - name: Run tests in Docker container
+    - name: Run Robot Framework tests
       run: |
-        docker run --rm \
-          -v ${{ github.workspace }}:/workspace \
-          --network host \
-          --shm-size=2gb \
-          robot-tests \
-          bash -c "
-            # Start web server in background
-            python -m http.server 8000 &
-            sleep 3
-            
-            # Run Robot Framework tests with Chrome options
-            cd cicdtestrobotfw
-            robot --variable BROWSER:headlesschrome --outputdir results regression/
-          "
+        cd cicdtestrobotfw
+        robot --outputdir results regression/
       continue-on-error: true
     
     - name: Get current date
