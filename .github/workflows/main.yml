@@ -1,4 +1,5 @@
 name: Robot Framework Tests
+
 on:
   push:
     branches: [ main ]
