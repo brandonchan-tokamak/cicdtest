@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.13.7 on win32)" generated="2025-10-17T08:42:08.785235" rpa="false" schemaversion="5">
+<suite id="s1" name="Cicdtest" source="C:\Users\jieli\OneDrive\Desktop\cicdtest">
+<suite id="s1-s1" name="Cicdtestrobotfw" source="C:\Users\jieli\OneDrive\Desktop\cicdtest\cicdtestrobotfw">
+<suite id="s1-s1-s1" name="Regression" source="C:\Users\jieli\OneDrive\Desktop\cicdtest\cicdtestrobotfw\regression">
+<suite id="s1-s1-s1-s1" name="Test" source="C:\Users\jieli\OneDrive\Desktop\cicdtest\cicdtestrobotfw\regression\test.robot">
+<test id="s1-s1-s1-s1-t1" name="Page Title Should Be Correct" line="8">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-10-17T08:42:09.197301" level="INFO">${options} = &lt;selenium.webdriver.chrome.options.Options object at 0x0000024ED0236660&gt;</msg>
+<var>${options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>sys, selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-10-17T08:42:09.196714" elapsed="0.000632"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--headless</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-10-17T08:42:09.197607" elapsed="0.000151"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--no-sandbox</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-10-17T08:42:09.197971" elapsed="0.000126"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-dev-shm-usage</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-10-17T08:42:09.198292" elapsed="0.000127"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-gpu</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-10-17T08:42:09.198610" elapsed="0.000123"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-extensions</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-10-17T08:42:09.198924" elapsed="0.000123"/>
+</kw>
+<kw name="Create Webdriver" owner="SeleniumLibrary">
+<msg time="2025-10-17T08:42:09.199423" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
+<arg>Chrome</arg>
+<arg>options=${options}</arg>
+<doc>Creates an instance of Selenium WebDriver.</doc>
+<status status="PASS" start="2025-10-17T08:42:09.199248" elapsed="5.068125"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2025-10-17T08:42:14.267947" level="INFO">Opening url 'https://brandonchan-tokamak.github.io/cicdtest/'</msg>
+<arg>${SITE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2025-10-17T08:42:14.267683" elapsed="0.721073"/>
+</kw>
+<kw name="Title Should Be" owner="SeleniumLibrary">
+<msg time="2025-10-17T08:42:14.997365" level="INFO">Page title is 'CI/CD Test Website'.</msg>
+<arg>CI/CD Test Website</arg>
+<doc>Verifies that the current page title equals ``title``.</doc>
+<status status="PASS" start="2025-10-17T08:42:14.989135" elapsed="0.008319"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-10-17T08:42:14.997923" elapsed="2.083654"/>
+</kw>
+<status status="PASS" start="2025-10-17T08:42:09.195540" elapsed="7.886555"/>
+</test>
+<status status="PASS" start="2025-10-17T08:42:08.825215" elapsed="8.258023"/>
+</suite>
+<suite id="s1-s1-s1-s2" name="Test2" source="C:\Users\jieli\OneDrive\Desktop\cicdtest\cicdtestrobotfw\regression\test2.robot">
+<test id="s1-s1-s1-s2-t1" name="Page Title Should Contain Text After Clicking Button" line="8">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-10-17T08:42:17.087432" level="INFO">${options} = &lt;selenium.webdriver.chrome.options.Options object at 0x0000024ED021DA90&gt;</msg>
+<var>${options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>sys, selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-10-17T08:42:17.087073" elapsed="0.000396"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--headless</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-10-17T08:42:17.087703" elapsed="0.000144"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--no-sandbox</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-10-17T08:42:17.088087" elapsed="0.000136"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-dev-shm-usage</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-10-17T08:42:17.088462" elapsed="0.000128"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-gpu</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-10-17T08:42:17.088832" elapsed="0.000129"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--disable-extensions</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-10-17T08:42:17.089206" elapsed="0.000129"/>
+</kw>
+<kw name="Create Webdriver" owner="SeleniumLibrary">
+<msg time="2025-10-17T08:42:17.089753" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
+<arg>Chrome</arg>
+<arg>options=${options}</arg>
+<doc>Creates an instance of Selenium WebDriver.</doc>
+<status status="PASS" start="2025-10-17T08:42:17.089586" elapsed="1.159245"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2025-10-17T08:42:18.249360" level="INFO">Opening url 'https://brandonchan-tokamak.github.io/cicdtest/'</msg>
+<arg>${SITE_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2025-10-17T08:42:18.249165" elapsed="0.143573"/>
+</kw>
+<kw name="Title Should Be" owner="SeleniumLibrary">
+<msg time="2025-10-17T08:42:18.402145" level="INFO">Page title is 'CI/CD Test Website'.</msg>
+<arg>CI/CD Test Website</arg>
+<doc>Verifies that the current page title equals ``title``.</doc>
+<status status="PASS" start="2025-10-17T08:42:18.393209" elapsed="0.009078"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-10-17T08:42:20.403604" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-10-17T08:42:18.402731" elapsed="2.000974"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-10-17T08:42:20.404705" level="INFO">Clicking element 'id:testBtn'.</msg>
+<arg>id:testBtn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-10-17T08:42:20.404175" elapsed="0.074260"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-10-17T08:42:22.479569" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-10-17T08:42:20.478830" elapsed="2.000851"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-10-17T08:42:22.480078" elapsed="2.156955"/>
+</kw>
+<status status="PASS" start="2025-10-17T08:42:17.086425" elapsed="7.550958"/>
+</test>
+<status status="PASS" start="2025-10-17T08:42:17.084343" elapsed="7.554060"/>
+</suite>
+<status status="PASS" start="2025-10-17T08:42:08.823920" elapsed="15.815846"/>
+</suite>
+<status status="PASS" start="2025-10-17T08:42:08.822542" elapsed="15.818237"/>
+</suite>
+<status status="PASS" start="2025-10-17T08:42:08.786915" elapsed="15.855017"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Cicdtest" id="s1" pass="2" fail="0" skip="0">Cicdtest</stat>
+<stat name="Cicdtestrobotfw" id="s1-s1" pass="2" fail="0" skip="0">Cicdtest.Cicdtestrobotfw</stat>
+<stat name="Regression" id="s1-s1-s1" pass="2" fail="0" skip="0">Cicdtest.Cicdtestrobotfw.Regression</stat>
+<stat name="Test" id="s1-s1-s1-s1" pass="1" fail="0" skip="0">Cicdtest.Cicdtestrobotfw.Regression.Test</stat>
+<stat name="Test2" id="s1-s1-s1-s2" pass="1" fail="0" skip="0">Cicdtest.Cicdtestrobotfw.Regression.Test2</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
